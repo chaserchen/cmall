@@ -1,0 +1,11 @@
+*.pyc
+.idea/*
+env/*
+development/*
+test/*
+var/*
+etc/*
+log/*
+log-archive/*
+.self-check-passed
+baseline/*

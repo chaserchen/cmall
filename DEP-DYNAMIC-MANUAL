@@ -1,0 +1,2 @@
+cmall<=database:cmall
+cmall.feature.person<=table:cmall/person
