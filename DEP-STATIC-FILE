@@ -1,25 +1,21 @@
 from __future__ import unicode_literals, print_function, division
 
 STATIC_FILE_DEPENDENCIES = {
-    'person': {
+    'cmall': {
         'js': [
             {
-                'output': 'person.js',
+                'output': 'cmall.js',
                 'files': [
-                    'person/js/jquery-1.10.2.min.js',
-                    'person/js/jquery-cookie-1.4.0.js',
-                    'person/js/json3-3.3.0.min.js',
-                    'person/js/veil.js',
+                    'js/jquery-1.10.2.min.js',
+                    'js/veil.js',
                 ]
             }
         ],
         'css': [
             {
-                'output': 'person.css',
+                'output': 'cmall.css',
                 'files': [
-                    'person/css/reset.min.css',
-                    'person/css/screen.min.css',
-                    'person/css/common.min.css',
+                    'css/index.css',
                 ]
             }
         ],

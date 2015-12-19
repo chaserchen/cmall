@@ -3,9 +3,9 @@ from __future__ import unicode_literals, print_function, division
 from veil.profile.web import *
 from cmall.feature.person import *
 
-person_route = route_for('person')
+cmall_route = route_for('cmall')
 
 
-@person_route('GET', '/')
+@cmall_route('GET', '/')
 def list_persons_page():
     return get_template('list-persons.html').render(persons=list_persons())

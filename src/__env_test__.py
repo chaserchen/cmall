@@ -8,10 +8,10 @@ TEST_REDIS_HOST = '127.0.0.1'
 TEST_REDIS_PORT = 6380
 
 config = __env__.env_config(
-    person_website_start_port=2050,
-    person_website_process_count=1,
-    person_website_domain='person.dev.dmright.com',
-    person_website_domain_port=81,
+    cmall_website_start_port=2050,
+    cmall_website_process_count=1,
+    cmall_website_domain='cmall.com',
+    cmall_website_domain_port=81,
     persist_store_redis_host=TEST_REDIS_HOST,
     persist_store_redis_port=TEST_REDIS_PORT,
     memory_cache_redis_host=TEST_REDIS_HOST,
@@ -37,7 +37,7 @@ ENV_TEST = {
                 redis_program('test', TEST_REDIS_HOST, TEST_REDIS_PORT),
                 __env__.cmall_postgresql_program(config),
                 __env__.log_rotated_nginx_program(merge_multiple_settings(
-                    __env__.person_website_nginx_server(config),
+                    __env__.cmall_website_nginx_server(config),
                 ))
             ),
             resources=[application_resource(component_names=list_all_components(), config=merge_settings(

@@ -1,3 +1,4 @@
+cmall.website.person<=website:cmall
 cmall.website.person<=website:person
 veil.backend.alipay=>event:alipay-trade-paid
 veil.backend.database.client<=event:process-teardown

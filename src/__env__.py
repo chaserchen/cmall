@@ -3,9 +3,9 @@ from veil.model.collection import *
 from veil.profile.setting import *
 from veil.frontend.nginx_setting import NGINX_PID_PATH
 
-WEBSITES = ['person']
+WEBSITES = ['cmall']
 
-PERSON_WEBSITE_BUCKETS = ['captcha_image', 'person_images']
+PERSON_WEBSITE_BUCKETS = ['captcha_image', 'cmall_images']
 
 PERSON_WEBSITE_MAX_UPLOAD_FILE_SIZE = '3m'
 
@@ -37,7 +37,7 @@ LOGGING_LEVEL_CONFIG = objectify({
 })
 
 
-def env_config(person_website_start_port, person_website_process_count, person_website_domain, person_website_domain_port, persist_store_redis_host,
+def env_config(cmall_website_start_port, cmall_website_process_count, cmall_website_domain, cmall_website_domain_port, persist_store_redis_host,
         persist_store_redis_port, memory_cache_redis_host, memory_cache_redis_port, cmall_postgresql_version, cmall_postgresql_host,
         cmall_postgresql_port, queue_type, queue_host, queue_port, resweb_domain, resweb_domain_port, resweb_host, resweb_port):
     return objectify(locals())
@@ -123,17 +123,17 @@ def memory_cache_redis_program(config):
     return redis_program('memory_cache', config.memory_cache_redis_host, config.memory_cache_redis_port)
 
 
-def person_website_programs(config):
-    return website_programs('person', LOGGING_LEVEL_CONFIG.cmall, application_config=cmall_config(config), start_port=config.person_website_start_port,
-        process_count=config.person_website_process_count)
+def cmall_website_programs(config):
+    return website_programs('cmall', LOGGING_LEVEL_CONFIG.cmall, application_config=cmall_config(config), start_port=config.cmall_website_start_port,
+        process_count=config.cmall_website_process_count)
 
 
-def person_website_nginx_server(config, extra_locations=None):
-    locations = website_locations('person', VEIL_ENV_TYPE in {'public', 'staging'}, max_upload_file_size=PERSON_WEBSITE_MAX_UPLOAD_FILE_SIZE)
+def cmall_website_nginx_server(config, extra_locations=None):
+    locations = website_locations('cmall', VEIL_ENV_TYPE in {'public', 'staging'}, max_upload_file_size=PERSON_WEBSITE_MAX_UPLOAD_FILE_SIZE)
     locations = merge_multiple_settings(locations, extra_locations or {}, website_bucket_locations(PERSON_WEBSITE_BUCKETS))
-    return nginx_server(config.person_website_domain, config.person_website_domain_port, locations=locations,
-        upstreams=website_upstreams('person', config.person_website_start_port, config.person_website_process_count),
-        error_page={'404': '404.html', '500': '500.html'}, error_page_dir='{}/static/person/error-page'.format(VEIL_HOME))
+    return nginx_server(config.cmall_website_domain, config.cmall_website_domain_port, locations=locations,
+        upstreams=website_upstreams('cmall', config.cmall_website_start_port, config.cmall_website_process_count),
+        error_page={'404': '404.html', '500': '500.html'}, error_page_dir='{}/static/cmall/error-page'.format(VEIL_HOME))
 
 
 def nginx_log_rotater_program():
@@ -177,13 +177,13 @@ def cmall_config(config):
             'host': config['{}_redis_host'.format(purpose)],
             'port': config['{}_redis_port'.format(purpose)]
         }
-    person_website_authority = config.person_website_domain if 80 == config.person_website_domain_port else '{}:{}'.format(
-        config.person_website_domain, config.person_website_domain_port)
+    cmall_website_authority = config.cmall_website_domain if 80 == config.cmall_website_domain_port else '{}:{}'.format(
+        config.cmall_website_domain, config.cmall_website_domain_port)
     for purpose in PERSON_WEBSITE_BUCKETS:
         cmall_config_['{}_bucket'.format(purpose)] = {
             'type': 'filesystem',
             'base_directory': VEIL_BUCKETS_DIR / purpose.replace('_', '-'),
-            'base_url': 'http://{}/buckets/{}'.format(person_website_authority, purpose.replace('_', '-')),
+            'base_url': 'http://{}/buckets/{}'.format(cmall_website_authority, purpose.replace('_', '-')),
         }
     for purpose in POSTGRESQL_CLIENTS:
         cmall_config_['{}_database_client'.format(purpose)] = {
