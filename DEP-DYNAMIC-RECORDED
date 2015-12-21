@@ -1,5 +1,4 @@
-cmall.website.person<=website:cmall
-cmall.website.person<=website:person
+cmall.website<=website:cmall
 veil.backend.alipay=>event:alipay-trade-paid
 veil.backend.database.client<=event:process-teardown
 veil.backend.log_shipper<=event:process-teardown
