@@ -45,6 +45,8 @@ ENV_DEVELOPMENT = {
                         'rewrite_redis_aof',
                         'clean_up_captcha_images',
                         'clean_up_inline_static_files',
+                        'get_shopping_mall_phone_urls',
+                        'get_product_data',
                     ],
                     config=config, count=2),
                 __env__.cmall_website_programs(config),

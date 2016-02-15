@@ -1,3 +1,6 @@
+cmall.feature.shopping_mall<=job:get_product_data
+cmall.feature.shopping_mall<=job:get_shopping_mall_phone_urls
+cmall.feature.shopping_mall<=periodic-job:@
 cmall.website<=website:cmall
 veil.backend.alipay=>event:alipay-trade-paid
 veil.backend.database.client<=event:process-teardown
