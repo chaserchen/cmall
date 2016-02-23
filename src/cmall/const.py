@@ -9,9 +9,7 @@ GENDERS = {
     GENDER_FEMALE: '女'
 }
 
-JD_PLATFORM = 1
-PRODUCT_TYPE_PHONE = 1
-
+PRODUCT_CATEGORY_PHONE = 1
 
 # three state constants for three-state variables
 STATUS_VOID = 0  # 空的，无效的，未开始的

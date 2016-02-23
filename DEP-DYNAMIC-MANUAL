@@ -1,4 +1,4 @@
 cmall<=database:cmall
 cmall.feature.person<=table:cmall/person
-cmall.feature.shopping_mall<=table:cmall/product_urls
-cmall.feature.shopping_mall<=table:cmall/shopping_mall
+cmall.feature.tmall<=table:cmall/tmall_product
+cmall.feature.tmall<=table:cmall/store
