@@ -1,1 +1,0 @@
-CREATE UNIQUE INDEX idx_name ON tmall_product(name);

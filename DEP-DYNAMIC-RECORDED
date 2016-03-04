@@ -1,5 +1,4 @@
-cmall.feature.tmall<=job:get_tmall_phone_data
-cmall.feature.tmall<=periodic-job:@
+cmall.feature.product<=job:get_product
 cmall.website<=website:cmall
 veil.backend.alipay=>event:alipay-trade-paid
 veil.backend.database.client<=event:process-teardown
