@@ -19,29 +19,29 @@ db = register_database('cmall')
 queue = register_queue()
 
 
-@script('list-product')
-def list_product_script():
-    list_products()
+@script('create-products')
+def create_products_script():
+    create_products()
 
 
 @command
-def list_products(type=optional(to_integer)):
-    if type:
-        product_url_objects = db().list('SELECT * FROM product_url WHERE type=%(type)s', type=type)
+def create_products(category=optional(to_integer)):
+    if category:
+        product_url_objects = db().list('SELECT * FROM product_url WHERE category=%(category)s', category=category)
     else:
         product_url_objects = db().list('SELECT * FROM product_url')
     if product_url_objects:
         for product_url_object in product_url_objects:
-            queue().enqueue(get_product_job, product_url=product_url_object.url, type=product_url_object.type)
+            queue().enqueue(create_product_job, product_url=product_url_object.url, category=product_url_object.category)
 
 
-@script('get-product')
-def get_product_script(product_url, type):
-    get_product_job(product_url, type)
+@script('create-product')
+def create_product_script(product_url, category):
+    create_product_job(product_url, category)
 
 
 @job
-def get_product_job(product_url, type):
+def create_product_job(product_url, category):
     if db().has_rows('SELECT 1 FROM product WHERE product_url=%(product_url)s', product_url=product_url):
         return
     try:
@@ -66,9 +66,9 @@ def get_product_job(product_url, type):
         brand = strip(brand) if brand else None
         detail_image = strip(detail_image) if detail_image else None
         if name and detail_image:
-            save_product_data(name, type, product_url, title, brand, detail_image)
+            save_product_data(name, category, product_url, title, brand, detail_image)
 
 
 @command
-def save_product_data(name=not_empty, type=to_integer, product_url=not_empty, title=anything, brand=anything, detail_image=anything):
-    db().insert('product', name=name, type=type, product_url=product_url, title=title, brand=brand, detail_image=detail_image)
+def save_product_data(name=not_empty, category=to_integer, product_url=not_empty, title=anything, brand=anything, detail_image=anything):
+    db().insert('product', name=name, category=category, product_url=product_url, title=title, brand=brand, detail_image=detail_image)

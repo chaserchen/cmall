@@ -1,4 +1,5 @@
-cmall.feature.product<=job:get_product
+cmall.feature.product<=job:create_platform_product
+cmall.feature.product<=job:create_product
 cmall.website<=website:cmall
 veil.backend.alipay=>event:alipay-trade-paid
 veil.backend.database.client<=event:process-teardown

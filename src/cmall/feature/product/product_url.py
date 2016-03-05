@@ -17,14 +17,14 @@ queue = register_queue()
 db = register_database('cmall')
 
 
-@script('list-product-urls')
-def list_product_urls_script():
+@script('create-product-urls')
+def create_product_urls_script():
     root_url = 'http://www.smzdm.com/fenlei/diannaoshuma'
-    type = PRODUCT_CATEGORY_PHONE
-    list_product_urls(root_url, type)
+    category = PRODUCT_CATEGORY_PHONE
+    create_product_urls(root_url, category)
 
 
-def list_product_urls(root_url, type):
+def create_product_urls(root_url, category):
     if not root_url:
         return
     try:
@@ -38,9 +38,9 @@ def list_product_urls(root_url, type):
         product_doms = product_list_dom.select('.card-wrap .pic-wrap a')
         if product_doms:
             product_urls = set(strip(product_dom.get('href')) for product_dom in product_doms if product_dom.get('href'))
-            existing_product_urls = set(db().list_scalar('SELECT url FROM product_url WHERE type=%(type)s', type=type))
+            existing_product_urls = set(db().list_scalar('SELECT url FROM product_url WHERE category=%(category)s', category=category))
             new_product_urls = product_urls - existing_product_urls
             if new_product_urls:
-                product_url_objects = [dict(url=product_url, type=type) for product_url in new_product_urls]
+                product_url_objects = [dict(url=product_url, category=category) for product_url in new_product_urls]
                 db().insert('product_url', product_url_objects)
                 print(product_url_objects)

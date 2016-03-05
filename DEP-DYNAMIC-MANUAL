@@ -1,4 +1,4 @@
 cmall<=database:cmall
 cmall.feature.product<=table:cmall/product_url
 cmall.feature.product<=table:cmall/product
-cmall.feature.product<=table:cmall/platform
+cmall.feature.product<=table:cmall/platform_product
