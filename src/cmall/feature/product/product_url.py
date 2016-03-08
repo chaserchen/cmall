@@ -9,19 +9,27 @@ from bs4 import BeautifulSoup
 from veil.backend.database.client import *
 from veil.backend.queue import *
 from veil.frontend.cli import *
+from veil.model.collection import *
 
-from cmall.const import PRODUCT_CATEGORY_PHONE, HEADERS_WWW
+from cmall.const import PRODUCT_CATEGORY_DIGITAL_PRODUCT, HEADERS_WWW, PRODUCT_CATEGORY_HOUSEHOLD_APPLIANCES
 
 LOGGER = logging.getLogger(__name__)
 queue = register_queue()
 db = register_database('cmall')
 
+ROOT_URL_DIGITAL_PRODUCT = 'http://www.smzdm.com/fenlei/diannaoshuma'
+ROOT_URL_HOUSEHOLD_APPLIANCES = 'http://www.smzdm.com/fenlei/jiayongdianqi'
+
+ROOTS = [
+    DictObject(root_url=ROOT_URL_DIGITAL_PRODUCT, category=PRODUCT_CATEGORY_DIGITAL_PRODUCT),
+    DictObject(root_url=ROOT_URL_HOUSEHOLD_APPLIANCES, category=PRODUCT_CATEGORY_HOUSEHOLD_APPLIANCES),
+]
+
 
 @script('create-product-urls')
 def create_product_urls_script():
-    root_url = 'http://www.smzdm.com/fenlei/diannaoshuma'
-    category = PRODUCT_CATEGORY_PHONE
-    create_product_urls(root_url, category)
+    for root in ROOTS:
+        create_product_urls(root.root_url, root.category)
 
 
 def create_product_urls(root_url, category):

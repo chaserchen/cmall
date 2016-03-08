@@ -19,6 +19,11 @@ db = register_database('cmall')
 queue = register_queue()
 
 
+@script('create-platform-products')
+def create_platform_products_script():
+    create_platform_products()
+
+
 @command
 def create_platform_products(category=optional(to_integer)):
     if category:
@@ -48,15 +53,16 @@ def create_platform_product_job(product_url, product_id):
         product_dom = BeautifulSoup(response.text)
         platform_doms = product_dom.select('.mall_link dd')
         for platform_dom in platform_doms:
-            name_dom = platform_dom.select('p.ellipsis')
+            platform_name_dom = platform_dom.select('p.ellipsis')
             price_dom = platform_dom.select('p.mall_price .grey')
             url_dome = platform_dom.select('.go_buy_now')
-            name = name_dom[0].string if name_dom else None
-            name = strip(name) if name else None
+            platform_name = platform_name_dom[0].string if platform_name_dom else None
+            platform_name = strip(platform_name) if platform_name else None
             price = price_dom[0].string if price_dom else None
             price = strip(price) if price else None
             url = url_dome[0].get('href') if url_dome else None
             url = strip(url) if url else None
-            platform_product = dict(name=name, product_id=product_id, price=price, url=url)
-            platform_products.append(platform_product)
-        print(platform_products)
+            if platform_name and price:
+                platform_product = dict(platform_name=platform_name, product_id=product_id, price=price, url=url)
+                platform_products.append(platform_product)
+        db().insert('platform_product', platform_products)
