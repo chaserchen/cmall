@@ -1,0 +1,18 @@
+<div class="nav">
+    <ul class="clearfix">
+        <li class="active">首页</li>
+        <li>优惠</li>
+        <li>数码</li>
+        <li>户外</li>
+        <li>母婴</li>
+        <li>百货</li>
+        <li>食品</li>
+        <li>礼品</li>
+    </ul>
+</div>
+<script type="text/javascript">
+    veil.widget.handle('.nav', 'li', 'click', function(widget) {
+        $(widget).find('.active').removeClass('active');
+        $(this).addClass('active');
+    })
+</script>

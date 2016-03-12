@@ -7,5 +7,7 @@ with veil_component.init_component(__name__):
     def init():
         from veil.frontend.web import register_website_context_manager
         from veil.frontend.visitor import enable_visitor_origin_tracking
+        from veil.frontend.visitor import enable_user_tracking
 
         register_website_context_manager('cmall', enable_visitor_origin_tracking('cmall'))
+        register_website_context_manager('cmall', enable_user_tracking('cmall', login_url='/login'))

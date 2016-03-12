@@ -18,6 +18,7 @@ veil.server.python.python_package_resource?Pillow=3.1.1
 veil.server.python.python_package_resource?beautifulsoup4=4.4.1
 veil.server.python.python_package_resource?croniter=0.3.11
 veil.server.python.python_package_resource?jinjatag=0.1.6
+veil.server.python.python_package_resource?lru-cache=0.2.3
 veil.server.python.python_package_resource?lxml=3.5.0
 veil.server.python.python_package_resource?psycopg2=2.6.1
 veil.server.python.python_package_resource?pyres=1.5

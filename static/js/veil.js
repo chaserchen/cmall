@@ -42,6 +42,15 @@ $.fn.serializeObject = function() {
 
 var veil = veil || {};
 
+veil.defaultAuthenticationErrorHandler = function(jqXHR) {
+    var loginUrl = jqXHR.getResponseHeader('WWW-Authenticate');
+    if (window.location.pathname === loginUrl) {
+        $('input[name=username]').focus().select();
+    } else {
+        window.location.href = loginUrl + window.location.hash;
+    }
+};
+
 veil.log = function(message) {
     if ("undefined" !== typeof console) {
         console.log(message);
@@ -149,6 +158,7 @@ veil.resource.get = function (options) {
     var onSuccess = options.onSuccess;
     var onError = options.onError;
     var onValidationError = options.onValidationError;
+    var onAuthenticationError = options.onAuthenticationError || veil.defaultAuthenticationErrorHandler;
     var dataType = options.dataType;
     var data = options.data;
     var widget = options.widget;
@@ -162,7 +172,7 @@ veil.resource.get = function (options) {
         if (!onError){
             onError = function (xhr) {
                 if (xhr.status != 400 && xhr.status != 401 && xhr.status != 403) {
-                    veil.widget.showErrorMessage(widget, {'@':['操作失败']});
+                    veil.widget.showErrorMessage(widget, {'@': '操作失败'});
                 }
             };
         }
@@ -182,14 +192,7 @@ veil.resource.get = function (options) {
         error: onError,
         statusCode: {
             400: onValidationError,
-            401: function(jqXHR){
-                var loginUrl = jqXHR.getResponseHeader('WWW-Authenticate');
-                if (window.location.pathname === loginUrl){
-                    $('input[name=username]').focus().select();
-                } else {
-                    window.location.href = loginUrl + window.location.hash;
-                }
-            },
+            401: onAuthenticationError,
             403: function() {veil.alert('权限不足');},
             500: function() {veil.alert('服务内部错误');},
             502: function() {veil.alert('服务暂时不可用，请稍后重试');},
@@ -208,6 +211,7 @@ veil.resource.create = function (options) {
     var onSuccess = options.onSuccess;
     var onError = options.onError;
     var onValidationError = options.onValidationError;
+    var onAuthenticationError = options.onAuthenticationError || veil.defaultAuthenticationErrorHandler;
     var onComplete = options.onComplete;
     var widget = options.widget;
     if (widget){
@@ -215,7 +219,7 @@ veil.resource.create = function (options) {
         if (!onError){
             onError = function (xhr) {
                 if (xhr.status != 400 && xhr.status != 401 && xhr.status != 403) {
-                    veil.widget.showErrorMessage(widget, {'@': ['操作失败']});
+                    veil.widget.showErrorMessage(widget, {'@': '操作失败'});
                 }
             };
         }
@@ -236,14 +240,7 @@ veil.resource.create = function (options) {
         complete:onComplete,
         statusCode:{
             400: onValidationError,
-            401: function(jqXHR){
-                var loginUrl = jqXHR.getResponseHeader('WWW-Authenticate');
-                if (window.location.pathname === loginUrl){
-                    $('input[name=username]').focus().select();
-                } else {
-                    window.location.href = loginUrl + window.location.hash;
-                }
-            },
+            401: onAuthenticationError,
             403: function() {veil.alert('权限不足');},
             404: function() {veil.alert('未找到')},
             500: function() {veil.alert('服务内部错误');},
@@ -266,13 +263,14 @@ veil.resource.update = function (options) {
     var onSuccess = options.onSuccess;
     var onError = options.onError;
     var onValidationError = options.onValidationError;
+    var onAuthenticationError = options.onAuthenticationError || veil.defaultAuthenticationErrorHandler;
     var widget = options.widget;
     if (widget){
         veil.widget.clearErrorMessages(widget);
         if (!onError){
             onError = function (xhr) {
                 if (xhr.status != 400 && xhr.status != 401 && xhr.status != 403) {
-                    veil.widget.showErrorMessage(widget, {'@': ['操作失败']});
+                    veil.widget.showErrorMessage(widget, {'@': '操作失败'});
                 }
             };
         }
@@ -291,14 +289,7 @@ veil.resource.update = function (options) {
         error: onError,
         statusCode: {
             400: onValidationError,
-            401: function(jqXHR){
-                var loginUrl = jqXHR.getResponseHeader('WWW-Authenticate');
-                if (window.location.pathname === loginUrl){
-                    $('input[name=username]').focus().select();
-                } else {
-                    window.location.href = loginUrl + window.location.hash;
-                }
-            },
+            401: onAuthenticationError,
             403: function() {veil.alert('权限不足');},
             404: function() {veil.alert('未找到')},
             500: function() {veil.alert('服务内部错误');},
@@ -321,13 +312,14 @@ veil.resource.patch = function (options) {
     var onSuccess = options.onSuccess;
     var onError = options.onError;
     var onValidationError = options.onValidationError;
+    var onAuthenticationError = options.onAuthenticationError || veil.defaultAuthenticationErrorHandler;
     var widget = options.widget;
     if (widget){
         veil.widget.clearErrorMessages(widget);
         if (!onError){
             onError = function (xhr) {
                 if (xhr.status != 400 && xhr.status != 401 && xhr.status != 403) {
-                    veil.widget.showErrorMessage(widget, {'@': ['操作失败']});
+                    veil.widget.showErrorMessage(widget, {'@': '操作失败'});
                 }
             };
         }
@@ -346,14 +338,7 @@ veil.resource.patch = function (options) {
         error: onError,
         statusCode: {
             400: onValidationError,
-            401: function(jqXHR){
-                var loginUrl = jqXHR.getResponseHeader('WWW-Authenticate');
-                if (window.location.pathname === loginUrl){
-                    $('input[name=username]').focus().select();
-                } else {
-                    window.location.href = loginUrl + window.location.hash;
-                }
-            },
+            401: onAuthenticationError,
             403: function() {veil.alert('权限不足');},
             404: function() {veil.alert('未找到')},
             500: function() {veil.alert('服务内部错误');},
@@ -375,6 +360,7 @@ veil.resource.del = function (options) {
     var onSuccess = options.onSuccess;
     var onError = options.onError;
     var onValidationError = options.onValidationError;
+    var onAuthenticationError = options.onAuthenticationError || veil.defaultAuthenticationErrorHandler;
     var widget = options.widget;
     if (widget){
         var widgetParent = widget.parent();
@@ -389,7 +375,7 @@ veil.resource.del = function (options) {
         if (!onError){
             onError = function (xhr) {
                 if (xhr.status != 400 && xhr.status != 401 && xhr.status != 403) {
-                    veil.widget.showErrorMessage(widget, {'@': ['操作失败']});
+                    veil.widget.showErrorMessage(widget, {'@': '操作失败'});
                 }
             };
         }
@@ -408,14 +394,7 @@ veil.resource.del = function (options) {
         error:onError,
         statusCode:{
             400: onValidationError,
-            401: function(jqXHR){
-                var loginUrl = jqXHR.getResponseHeader('WWW-Authenticate');
-                if (window.location.pathname === loginUrl){
-                    $('input[name=username]').focus().select();
-                } else {
-                    window.location.href = loginUrl + window.location.hash;
-                }
-            },
+            401: onAuthenticationError,
             403: function() {veil.alert('权限不足');},
             404: function() {veil.alert('未找到')},
             500: function() {veil.alert('服务内部错误');},
@@ -432,9 +411,9 @@ veil.alertErrorMessage = function (allErrors, displayAll) {
     for (var field in allErrors) {
         if (allErrors.hasOwnProperty(field)) {
             if (displayAll) {
-                errors.push(field + ': ' + allErrors[field].join(', '));
+                errors.push(field + ': ' + allErrors[field]);
             } else {
-                errors.push(allErrors[field][0]);
+                errors.push(allErrors[field]);
                 break;
             }
         }
@@ -605,18 +584,14 @@ veil.widget.refresh = function (widget, options) {
 veil.widget.showErrorMessage = function (widget, allErrors) {
     for (var field in allErrors) {
         if (allErrors.hasOwnProperty(field)) {
-            var errors = allErrors[field];
-            errors.reverse();
-            $(errors).each(function () {
-                var error = this;
-                if (field === '@'){
-                    widget.prepend('<span class="error-message label label-warning summary-error-message"><i class="icon-info-sign"></i>' + error + '</span>');
-                } else {
-                    var $field = widget.find('[name=' + field + ']:first');
-                    var $error = $('<span class="error-message label label-warning"><i class="icon-info-sign"></i>' + error + '</span>');
-                    $error.insertAfter( $field );
-                }
-            });
+            var error = allErrors[field];
+            if (field === '@'){
+                widget.prepend('<span class="error-message label label-warning summary-error-message"><i class="icon-info-sign"></i>' + error + '</span>');
+            } else {
+                var $field = widget.find('[name=' + field + ']:first');
+                var $error = $('<span class="error-message label label-warning"><i class="icon-info-sign"></i>' + error + '</span>');
+                $error.insertAfter( $field );
+            }
         }
     }
 };

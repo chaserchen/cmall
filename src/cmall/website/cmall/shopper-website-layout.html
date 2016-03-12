@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name=viewport content="initial-scale=1">
+    <link rel="shortcut icon" sizes="196x196" href="{{ static_url('image/head-title.png') }}">
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+    <link rel="stylesheet" href="{{ static_url('css/index.css') }}">
+</head>
+<body>
+<div class="head">
+    <div class="head-logo">
+        <a target="_blank" href="/"><img src="{{ static_url('image/logo.png') }}" width="130px" height="60px"/></a>
+        <p class="head-logo-title">一家专做比价的网站</p>
+    </div>
+    <form id="search">
+        <input type="search" id="search-input" name="search"/>
+        <i class="icon-search"></i>
+    </form>
+    <div id="welcome" class="clearfix">
+        <li>您好，欢迎来到点点</li>
+        {{ widgets.login_info() }}
+    </div>
+</div>
+{{ widgets.nav() }}
+{% block main %}{% endblock %}
+
+<script type="text/javascript" src="{{ static_url('js/jquery-2.1.4.min.js') }}" data-keep="true"></script>
+<script type="text/javascript" src="{{ static_url('js/js.cookie-2.0.4.min.js') }}" data-keep="true"></script>
+<script type="text/javascript" src="{{ static_url('js/veil.js') }}" data-keep="true"></script>
+<!--[if lte IE 9]><script type="text/javascript" data-keep="true">$.ajaxSetup({cache: false});</script><![endif]-->
+</body>
+</html>
