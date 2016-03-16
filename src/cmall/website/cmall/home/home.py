@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function, division
 from veil.frontend.template import *
 from veil.frontend.web import *
 
-from cmall.feature.shopper.shopper import *
+from cmall.feature.shopper import *
 from cmall.website.shartlet.user import update_current_shopper_on_request, remember_current_signed_in_shopper, \
     remove_current_signed_in_shopper
 

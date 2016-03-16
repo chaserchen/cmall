@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name=viewport content="initial-scale=1">
+    <link rel="shortcut icon" sizes="196x196" href="{{ static_url('image/head-title.png') }}">
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+    <link rel="stylesheet" href="{{ static_url('dialog/dialog.min.css') }}">
+    <link rel="stylesheet" href="{{ static_url('bootstrap/css/bootstrap.min.css') }}">
+</head>
+<body>
+{% block main %}{% endblock %}
+<script type="text/javascript" src="{{ static_url('js/jquery-2.1.4.min.js') }}" data-keep="true"></script>
+<script type="text/javascript" src="{{ static_url('js/js.cookie-2.0.4.min.js') }}" data-keep="true"></script>
+<script type="text/javascript" src="{{ static_url('js/veil.js') }}" data-keep="true"></script>
+<script type="text/javascript" src="{{ static_url('dialog/dialog.min.js') }}" data-keep="true"></script>
+<script type="text/javascript" src="{{ static_url('bootstrap/js/bootstrap.min.js') }}" data-keep="true"></script>
+<!--[if lte IE 9]><script type="text/javascript" data-keep="true">$.ajaxSetup({cache: false});</script><![endif]-->
+</body>
+</html>

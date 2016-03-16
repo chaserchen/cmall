@@ -11,6 +11,10 @@ config = __env__.env_config(
     cmall_website_process_count=1,
     cmall_website_domain='www.cmall.com',
     cmall_website_domain_port=80,
+    operator_website_start_port=2010,
+    operator_website_process_count=1,
+    operator_website_domain='operator.cmall.com',
+    operator_website_domain_port=80,
     persist_store_redis_host=DEVELOPMENT_REDIS_HOST,
     persist_store_redis_port=DEVELOPMENT_REDIS_PORT,
     memory_cache_redis_host=DEVELOPMENT_REDIS_HOST,
@@ -50,9 +54,11 @@ ENV_DEVELOPMENT = {
                     ],
                     config=config, count=2),
                 __env__.cmall_website_programs(config),
+                __env__.operator_website_programs(config),
                 __env__.log_rotated_nginx_program(merge_multiple_settings(
                     __env__.resweb_nginx_server(config),
                     __env__.cmall_website_nginx_server(config),
+                    __env__.operator_website_nginx_server(config),
                 ))
             )
         )

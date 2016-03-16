@@ -1,6 +1,7 @@
 cmall.feature.product<=job:create_platform_product
 cmall.feature.product<=job:create_product
 cmall.website.cmall<=website:cmall
+cmall.website.operator<=website:operator
 cmall.website<=website:cmall
 veil.backend.alipay=>event:alipay-trade-paid
 veil.backend.database.client<=event:process-teardown

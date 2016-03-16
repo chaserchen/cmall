@@ -3,7 +3,7 @@ from veil.model.collection import *
 from veil.profile.setting import *
 from veil.frontend.nginx_setting import NGINX_PID_PATH
 
-WEBSITES = ['cmall']
+WEBSITES = ['cmall', 'operator']
 
 PERSON_WEBSITE_BUCKETS = ['captcha_image', 'cmall_images']
 
@@ -37,9 +37,27 @@ LOGGING_LEVEL_CONFIG = objectify({
 })
 
 
-def env_config(cmall_website_start_port, cmall_website_process_count, cmall_website_domain, cmall_website_domain_port, persist_store_redis_host,
-        persist_store_redis_port, memory_cache_redis_host, memory_cache_redis_port, cmall_postgresql_version, cmall_postgresql_host,
-        cmall_postgresql_port, queue_type, queue_host, queue_port, resweb_domain, resweb_domain_port, resweb_host, resweb_port):
+def env_config(
+        cmall_website_start_port,
+        cmall_website_process_count,
+        cmall_website_domain,
+        cmall_website_domain_port,
+        operator_website_start_port,
+        operator_website_process_count,
+        operator_website_domain,
+        operator_website_domain_port,
+        persist_store_redis_host,
+        persist_store_redis_port,
+        memory_cache_redis_host,
+        memory_cache_redis_port,
+        cmall_postgresql_version,
+        cmall_postgresql_host,
+        cmall_postgresql_port,
+        queue_type, queue_host,
+        queue_port, resweb_domain,
+        resweb_domain_port,
+        resweb_host,
+        resweb_port):
     return objectify(locals())
 
 
@@ -134,6 +152,19 @@ def cmall_website_nginx_server(config, extra_locations=None):
     return nginx_server(config.cmall_website_domain, config.cmall_website_domain_port, locations=locations,
         upstreams=website_upstreams('cmall', config.cmall_website_start_port, config.cmall_website_process_count),
         error_page={'404': '404.html', '500': '500.html'}, error_page_dir='{}/static/cmall/error-page'.format(VEIL_HOME))
+
+
+def operator_website_programs(config):
+    return website_programs('operator', LOGGING_LEVEL_CONFIG.cmall, application_config=cmall_config(config), start_port=config.operator_website_start_port,
+        process_count=config.operator_website_process_count)
+
+
+def operator_website_nginx_server(config, extra_locations=None):
+    locations = website_locations('operator', VEIL_ENV_TYPE in {'public', 'staging'}, max_upload_file_size=PERSON_WEBSITE_MAX_UPLOAD_FILE_SIZE)
+    locations = merge_multiple_settings(locations, extra_locations or {}, website_bucket_locations(PERSON_WEBSITE_BUCKETS))
+    return nginx_server(config.operator_website_domain, config.operator_website_domain_port, locations=locations,
+        upstreams=website_upstreams('operator', config.operator_website_start_port, config.operator_website_process_count),
+        error_page={'404': '404.html', '500': '500.html'}, error_page_dir='{}/static/operator/error-page'.format(VEIL_HOME))
 
 
 def nginx_log_rotater_program():
