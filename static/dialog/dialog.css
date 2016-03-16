@@ -1,0 +1,84 @@
+#dialog-overlay{
+	background: black;
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=35)";
+
+    /* IE 5-7 */
+    filter: alpha(opacity=35);
+
+    /* Netscape */
+    -moz-opacity: 0.35;
+
+    /* Safari 1.x */
+    -khtml-opacity: 0.35;
+
+    /* Good browsers */
+    opacity: 0.35;
+
+	z-index: 2000;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+#dialog-box{
+	z-index: 2001;
+	position: absolute;
+	background: #fff;
+	padding: 15px;
+    background: #fff;
+
+	border:6px solid rgba(0,0,0,0);
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	border-radius:5px;
+
+	-webkit-box-shadow:0 0 18px rgba(0,0,0,0.4);
+	-moz-box-shadow:0 0 18px rgba(0,0,0,0.4);
+	box-shadow:0 0 18px rgba(0,0,0,0.4);
+}
+#dialog-close-button{
+	float: right;
+	position: relative;
+	right: -32px;
+	top: -32px;
+	opacity: .7;
+
+}
+#dialog-close-button:hover{
+	cursor: pointer;
+	opacity: 1;
+}
+
+#dialog-box h3{
+    text-transform: uppercase;
+}
+#dialog-box fieldset{
+    /* it not need when using bootstrap*/
+    /*margin-top: 20px;*/
+    /*float:right;*/
+}
+#dialog-box fieldset legend{
+    margin-bottom: 15px !important;
+}
+#dialog-box fieldset button{
+    margin-right: 10px;
+}
+.close-dialog{
+    cursor: pointer;
+}
+
+/* confirm dialog */
+.confirm-content{
+    display: inline-block;
+    font-weight: bold;
+    width: 180px;
+    margin-left: 30px;
+    line-height:1.2em;
+}
+.confirm-content img{
+    margin-right: 1em;
+}
+
+.dialog-content-holder {
+    display: none;
+}

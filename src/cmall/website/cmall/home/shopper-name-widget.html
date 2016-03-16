@@ -1,0 +1,26 @@
+{% if shopper %}
+    <li>{{ shopper.name }}</li>
+    <li class="logout">退出</li>
+{% else %}
+    <li class="login">登录</li>
+    <li class="register">注册</li>
+{% endif %}
+<script>
+    $(document).ready(function () {
+        veil.widget.handle('', '.register', 'click', function () {
+            veil.event.publish('open-register-modal');
+        });
+        veil.widget.handle('', '.login', 'click', function () {
+            veil.event.publish('open-login-modal');
+        });
+        veil.widget.handle('', '.logout', 'click', function () {
+            veil.resource.get({
+                url: '/logout',
+                onSuccess: function () {
+                    window.location.reload();
+                    return;
+                }
+            });
+        });
+    });
+</script>

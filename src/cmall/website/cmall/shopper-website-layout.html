@@ -8,6 +8,8 @@
         {% block title %}{% endblock %}
     </title>
     <link rel="stylesheet" href="{{ static_url('css/index.css') }}">
+    <link rel="stylesheet" href="{{ static_url('dialog/dialog.min.css') }}">
+    <link rel="stylesheet" href="{{ static_url('bootstrap/css/bootstrap.min.css') }}">
 </head>
 <body>
 <div class="head">
@@ -21,7 +23,7 @@
     </form>
     <div id="welcome" class="clearfix">
         <li>您好，欢迎来到点点</li>
-        {{ widgets.login_info() }}
+        {{ widgets.shopper_name() }}
     </div>
 </div>
 {{ widgets.nav() }}
@@ -30,6 +32,28 @@
 <script type="text/javascript" src="{{ static_url('js/jquery-2.1.4.min.js') }}" data-keep="true"></script>
 <script type="text/javascript" src="{{ static_url('js/js.cookie-2.0.4.min.js') }}" data-keep="true"></script>
 <script type="text/javascript" src="{{ static_url('js/veil.js') }}" data-keep="true"></script>
+<script type="text/javascript" src="{{ static_url('dialog/dialog.min.js') }}" data-keep="true"></script>
+<script type="text/javascript" src="{{ static_url('bootstrap/js/bootstrap.min.js') }}" data-keep="true"></script>
 <!--[if lte IE 9]><script type="text/javascript" data-keep="true">$.ajaxSetup({cache: false});</script><![endif]-->
+<script>
+    $(document).ready(function () {
+        veil.event.subscribe('open-login-modal', function () {
+            $.showDialog({
+                content: '/login',
+                width: '500px'
+            })
+        });
+        veil.event.subscribe('open-register-modal', function () {
+            $.showDialog({
+                content: '/register',
+                width: '500px'
+            })
+        });
+        veil.event.subscribe('event-shopper-logged-in', function () {
+            window.location.reload();
+            return;
+        })
+    });
+</script>
 </body>
 </html>

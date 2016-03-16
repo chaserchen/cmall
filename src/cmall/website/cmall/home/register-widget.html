@@ -1,0 +1,73 @@
+<form id="register-widget">
+    <h3>注册</h3>
+    <div class="form-group">
+        <label for="name">姓名</label>
+        <input type="text" name="name" class="form-control" id="name" placeholder="姓名">
+    </div>
+    <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" name="password" class="form-control" id="password" placeholder="密码">
+    </div>
+    <div class="form-group">
+        <label for="confirm-password">确认密码</label>
+        <input type="password" name="confirm-password" class="form-control" id="confirm-password" placeholder="确认密码">
+    </div>
+    <div class="form-group">
+        <label for="email">邮箱</label>
+        <input type="email" name="email" class="form-control" id="email" placeholder="邮箱">
+    </div>
+    <div class="form-group">
+        <label for="mobile">手机号</label>
+        <input type="text" name="mobile" class="form-control" id="mobile" placeholder="手机号">
+    </div>
+    <button type="submit" class="btn btn-primary" id="register">注册</button>
+</form>
+<script>
+    $(document).ready(function () {
+        veil.widget.handle('#register-widget', '#register', 'click', function (widget, e) {
+            e.preventDefault();
+            var name = $.trim($(widget).find('#name').val());
+            var password = $.trim($(widget).find('#password').val());
+            var confirmPassword = $.trim($(widget).find('#confirm-password').val());
+            var mobile = $.trim($(widget).find('#mobile').val());
+            var email = $.trim($(widget).find('#email').val());
+            if (!name) {
+                alert('请填写姓名');
+                return false;
+            }
+            if (!password) {
+                alert('请填写密码');
+                return false;
+            }
+            if (!confirmPassword) {
+                alert('请再次输入您的密码');
+                return false;
+            }
+            if (password !== confirmPassword) {
+                alert('两次密码输入不一致，请重新输入');
+                return false;
+            }
+            if (!mobile) {
+                alert('请输入手机号');
+                return false;
+            }
+            var data = {
+                name: name,
+                password: password,
+                confirm_password: confirmPassword,
+                mobile: mobile,
+                email: email
+            };
+            veil.resource.create({
+                url: '/register',
+                data: data,
+                dataFormat: 'json',
+                dataType: 'json',
+                onSuccess: function () {
+                    veil.event.publish('event-shopper-logged-in');
+                    $.closeDialog();
+                }
+            });
+        })
+    });
+</script>

@@ -1,0 +1,1 @@
+ALTER TABLE shopper ADD COLUMN password VARCHAR(32) NOT NULL;
