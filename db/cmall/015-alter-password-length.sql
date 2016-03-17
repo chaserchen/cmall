@@ -1,0 +1,1 @@
+ALTER TABLE shopper ALTER COLUMN password TYPE VARCHAR(128);

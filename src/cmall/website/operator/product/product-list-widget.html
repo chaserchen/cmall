@@ -1,0 +1,39 @@
+<div id="product-list-page" style="margin: 20px auto 20px auto;width: 90%" data-refresh-url="/products">
+    <div class="form-group col-md-2" style="margin-bottom: 20px;padding-left: 0">
+        <select class="form-control categories">
+            {% for category in categories %}
+                <option value="{{ category }}" {{ 'selected' if category == current_category else '' }}>{{ category |category_type }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <table class="table">
+        <tr>
+            <th>商品编码</th>
+            <th>品类</th>
+            <th>品牌</th>
+            <th>商品名称</th>
+            <th>操作</th>
+        </tr>
+        {% for product in products %}
+            <tr>
+                <td class="active">{{ product.id }}</td>
+                <td class="active">{{ product.category |category_type }}</td>
+                <td class="active">{{ product.brand }}</td>
+                <td class="active">{{ product.name }}</td>
+                <td class="active" data-product-id="{{ product.id }}">
+                    <button class="btn btn-info">促销</button>
+                </td>
+                <td class="active" data-product-id="{{ product.id }}">
+                    <button class="btn btn-danger">隐藏</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        veil.widget.handle('#product-list-page', '.categories', 'change', function (widget) {
+            veil.widget.refresh($(widget), {data: {category: $(this).val()}});
+        })
+    });
+</script>

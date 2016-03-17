@@ -47,3 +47,7 @@ def remember_current_signed_in_shopper(current_shopper, website):
 def remove_current_signed_in_shopper(website):
     remove_logged_in_user_id(website)
 
+
+def get_current_operator(website):
+    operator_id = get_logged_in_user_id(website)
+    return get_operator(operator_id)

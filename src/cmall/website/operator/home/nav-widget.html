@@ -1,0 +1,11 @@
+{% if operator %}
+    <ul class="nav nav-pills" style="width: 90%;margin: auto">
+        <li role="presentation" class="active" style="margin-right: 30px"><a href="/">商品</a></li>
+        <li role="presentation" style="margin-right: 30px"><a href="/promotion">推广</a></li>
+        <li role="presentation" style="margin-right: 30px"><a href="/operator">管理员</a></li>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="javascript: void(0)">{{ operator.name }}</a></li>
+            <li><a href="/logout">退出</a></li>
+        </ul>
+    </ul>
+{% endif %}

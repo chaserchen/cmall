@@ -7,11 +7,21 @@
     <title>
         {% block title %}{% endblock %}
     </title>
+    <link rel="stylesheet" href="{{ static_url('css/operator.css') }}">
     <link rel="stylesheet" href="{{ static_url('dialog/dialog.min.css') }}">
     <link rel="stylesheet" href="{{ static_url('bootstrap/css/bootstrap.min.css') }}">
 </head>
-<body>
-{% block main %}{% endblock %}
+<body style="background-color: #f5f5f5">
+<div class="head">
+    <div class="head-logo">
+        <a target="_blank" href="/"><img src="{{ static_url('image/logo.png') }}" width="130px" height="60px"/></a>
+        <p class="head-logo-title">一家专做比价的网站</p>
+    </div>
+    <p class="title">系统后台管理</p>
+</div>
+{{ widgets.nav() }}
+{% block main %}
+{% endblock %}
 <script type="text/javascript" src="{{ static_url('js/jquery-2.1.4.min.js') }}" data-keep="true"></script>
 <script type="text/javascript" src="{{ static_url('js/js.cookie-2.0.4.min.js') }}" data-keep="true"></script>
 <script type="text/javascript" src="{{ static_url('js/veil.js') }}" data-keep="true"></script>

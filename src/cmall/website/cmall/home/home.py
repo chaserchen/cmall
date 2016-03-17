@@ -56,7 +56,7 @@ def login_action():
     request = get_current_http_request()
     mobile = get_http_argument('mobile')
     password = get_http_argument('password')
-    shopper = sign_in(mobile, password)
+    shopper = shopper_sign_in(mobile, password)
     update_current_shopper_on_request(request, shopper)
     remember_current_signed_in_shopper(shopper, 'cmall')
 

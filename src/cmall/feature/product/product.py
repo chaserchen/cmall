@@ -72,3 +72,12 @@ def create_product_job(product_url, category):
 @command
 def save_product_data(name=not_empty, category=to_integer, product_url=not_empty, title=anything, brand=anything, detail_image=anything):
     db().insert('product', name=name, category=category, product_url=product_url, title=title, brand=brand, detail_image=detail_image)
+
+
+@command
+def list_products(category=to_integer):
+    return db().list('SELECT * FROM product WHERE category=%(category)s', category=category)
+
+
+def list_categories():
+    return db().list_scalar('SELECT DISTINCT category FROM product')
