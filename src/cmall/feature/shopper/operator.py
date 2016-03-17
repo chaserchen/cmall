@@ -4,6 +4,8 @@ from __future__ import unicode_literals, print_function, division
 from veil.frontend.cli import *
 from veil.profile.model import *
 
+from cmall.const import OPERATOR_COMMON
+
 db = register_database('cmall')
 
 
@@ -13,7 +15,7 @@ def create_operator_script(name, password, mobile, role):
 
 
 @command
-def create_operator(name=not_empty, password=not_empty, mobile=is_mobile, role=optional(to_integer, default=2)):
+def create_operator(name=not_empty, password=not_empty, mobile=is_mobile, role=optional(to_integer, default=OPERATOR_COMMON)):
     operator = get_operator_by_mobile(mobile)
     if operator:
         raise InvalidCommand({'operator': '您已注册，请直接登录'})

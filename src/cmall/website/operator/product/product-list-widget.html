@@ -6,6 +6,11 @@
             {% endfor %}
         </select>
     </div>
+    <div class="form-group col-md-2" style="line-height: 34px">
+        <label>
+            <input type="checkbox" id="show-hide-products" value="show-hide-products" {{ 'checked' if show_hide_products else '' }}>显示所有隐藏的商品
+        </label>
+    </div>
     <table class="table">
         <tr>
             <th>商品编码</th>
@@ -15,7 +20,7 @@
             <th>操作</th>
         </tr>
         {% for product in products %}
-            <tr>
+            <tr class="product" data-id="{{ product.id }}">
                 <td class="active">{{ product.id }}</td>
                 <td class="active">{{ product.category |category_type }}</td>
                 <td class="active">{{ product.brand }}</td>
@@ -24,7 +29,11 @@
                     <button class="btn btn-info">促销</button>
                 </td>
                 <td class="active" data-product-id="{{ product.id }}">
-                    <button class="btn btn-danger">隐藏</button>
+                    {% if not product.hide %}
+                        <button class="hide-product btn btn-danger">隐藏</button>
+                    {% else %}
+                        <button class="show-product btn btn-success">显示</button>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
@@ -32,8 +41,35 @@
 </div>
 <script>
     $(document).ready(function () {
-        veil.widget.handle('#product-list-page', '.categories', 'change', function (widget) {
+        veil.widget.handle('#product-list-page', '.categories', 'click', function (widget) {
             veil.widget.refresh($(widget), {data: {category: $(this).val()}});
-        })
+        });
+        veil.widget.handle('#product-list-page', '#show-hide-products', 'click', function(widget) {
+            veil.widget.refresh($(widget), {data: {show_hide_products: Boolean($('#show-hide-products:checked').val())}});
+        });
+        veil.widget.handle('.product', '.hide-product', 'click', function (widget) {
+            var this_ = this;
+            veil.resource.update({
+                url: '/hide-product',
+                data : {product_id: $(widget).data('id')},
+                onSuccess: function() {
+                    $(this_).removeClass('hide-product').addClass('show-product');
+                    $(this_).removeClass('btn-danger').addClass('btn-success');
+                    $(this_).text('显示');
+                }
+            })
+        });
+        veil.widget.handle('.product', '.show-product', 'click', function (widget) {
+            var this_ = this;
+            veil.resource.update({
+                url: '/show-product',
+                data : {product_id: $(widget).data('id')},
+                onSuccess: function() {
+                    $(this_).removeClass('show-product').addClass('hide-product');
+                    $(this_).removeClass('btn-success').addClass('btn-danger');
+                    $(this_).text('隐藏');
+                }
+            })
+        });
     });
 </script>

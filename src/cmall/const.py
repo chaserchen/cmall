@@ -40,5 +40,9 @@ STATUS_INCOMPLETE = 1  # 部分的，不完全的，未完成的，进行中的
 STATUS_COMPLETE = 2  # 全部的，完全的，完成的
 
 
-operator_super = 1  # 超级管理员
-operator_common = 2  # 普通管理员
+OPERATOR_SUPER = 1  # 超级管理员
+OPERATOR_COMMON = 2  # 普通管理员
+
+
+PROMOTION_TITLE = 1  # 首页轮播图促销
+PROMOTION_COMMON = 2  # 首页列表促销

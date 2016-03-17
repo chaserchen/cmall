@@ -76,8 +76,22 @@ def save_product_data(name=not_empty, category=to_integer, product_url=not_empty
 
 @command
 def list_products(category=to_integer):
-    return db().list('SELECT * FROM product WHERE category=%(category)s', category=category)
+    return db().list('SELECT * FROM product WHERE category=%(category)s ORDER BY hide DESC, brand', category=category)
+
+
+def list_hide_products():
+    return db().list('SELECT * FROM product WHERE hide ORDER BY brand, name')
 
 
 def list_categories():
     return db().list_scalar('SELECT DISTINCT category FROM product')
+
+
+@command
+def hide_product(id=to_integer):
+    db().execute('UPDATE product SET hide = TRUE WHERE id=%(id)s', id=id)
+
+
+@command
+def show_product(id=to_integer):
+    db().execute('UPDATE product SET hide = FALSE WHERE id=%(id)s', id=id)
