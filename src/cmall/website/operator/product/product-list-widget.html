@@ -25,8 +25,12 @@
                 <td class="active">{{ product.category |category_type }}</td>
                 <td class="active">{{ product.brand }}</td>
                 <td class="active">{{ product.name }}</td>
-                <td class="active" data-product-id="{{ product.id }}">
-                    <button class="btn btn-info">促销</button>
+                <td class="active">
+                    {% if product.promotion_id %}
+                        <button id="product-{{ product.id }}" class="btn btn-warning promotion" data-product-id="{{ product.id }}">推广</button>
+                    {% else %}
+                        <button id="product-{{ product.id }}" class="btn btn-info promotion" data-product-id="{{ product.id }}">推广</button>
+                    {% endif %}
                 </td>
                 <td class="active" data-product-id="{{ product.id }}">
                     {% if not product.hide %}
@@ -71,5 +75,19 @@
                 }
             })
         });
+        veil.widget.handle('#product-list-page', '.promotion', 'click', function () {
+            if ($(this).hasClass('btn-warning')) {
+                alert('该商品已推广，请进入推广管理页面管理推广商品');
+                return;
+            } else {
+                $.showDialog({
+                    content: '/products/' + $(this).data('productId') + '/promotion',
+                    width: '400px'
+                })
+            }
+        });
+        veil.event.subscribe('event-create-promotion', function (e, product_id) {
+            $('#product-' + product_id).removeClass('btn-info').addClass('btn-warning');
+        })
     });
 </script>

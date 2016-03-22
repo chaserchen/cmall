@@ -1,0 +1,39 @@
+<link rel="stylesheet" type="text/css" href="{{ static_url('jquery-ui/jquery-ui-1.10.3.min.css') }}"/>
+<form id="product-promotion-widget" data-product-id="{{ product_id }}">
+    <div class="form-group">
+        <label for="start-at">开始时间</label>
+        <input type="text" name="start_at" class="form-control datetime" id="start-at" placeholder="开始时间">
+    </div>
+    <div class="form-group">
+        <label for="end-at">结束时间</label>
+        <input type="text" name="end_at" class="form-control datetime" id="end-at" placeholder="结束时间">
+    </div>
+    <button type="submit" class="btn btn-primary" id="confirm">确定</button>
+</form>
+<script type="text/javascript" src="{{ static_url('jquery-ui/jquery-ui-1.10.3.min.js') }}"></script>
+<script type="text/javascript" src="{{ static_url('jquery-ui/jquery.ui.datepicker-zh-CN.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#product-promotion-widget .datetime').datepicker({
+            changeYear: true,
+            yearRange: '-3:+3'
+        });
+        veil.widget.handle('#product-promotion-widget', '#confirm', 'click', function (widget, e) {
+            e.preventDefault();
+            veil.resource.create({
+                url: '/promotions',
+                data: {
+                    product_id: widget.data('productId'),
+                    start_at: widget.find('#start-at').val(),
+                    end_at: widget.find('#end-at').val()
+                },
+                dataType: 'json',
+                dataFormat: 'json',
+                onSuccess: function () {
+                    veil.event.publish('event-create-promotion', widget.data('productId'));
+                    $.closeDialog();
+                }
+            });
+        })
+    });
+</script>

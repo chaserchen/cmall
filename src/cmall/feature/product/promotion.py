@@ -13,3 +13,13 @@ def list_title_promotions():
 
 def list_common_promotions():
     return db().list('SELECT * FROM promotion WHERE type=%(PROMOTION_COMMON)s', PROMOTION_COMMON=PROMOTION_COMMON)
+
+
+@command
+def create_promotion(product_id=to_integer, start_at=to_date(format='%Y-%m-%d'), end_at=to_date(format='%Y-%m-%d'), type=to_integer):
+    db().insert('promotion', product_id=product_id, start_at=start_at, end_at=end_at, type=type)
+
+
+@command
+def delete_promotion(id=to_integer):
+    db().execute('DELETE FROM promotion WHERE id=%(id)s', id=id)

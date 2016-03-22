@@ -13,6 +13,8 @@ with veil_component.init_component(__name__):
 
     from .promotion import list_title_promotions
     from .promotion import list_common_promotions
+    from .promotion import create_promotion
+    from .promotion import delete_promotion
     __all__ = [
         create_product_urls.__name__,
         list_products.__name__,
@@ -23,4 +25,6 @@ with veil_component.init_component(__name__):
 
         list_title_promotions.__name__,
         list_common_promotions.__name__,
+        create_promotion.__name__,
+        delete_promotion.__name__,
     ]
