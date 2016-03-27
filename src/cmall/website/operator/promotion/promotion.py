@@ -8,14 +8,16 @@ from cmall.feature.product import *
 operator_route = route_for('operator')
 
 
-@widget
-def list_title_promotions_widget():
-    title_promotions = list_title_promotions()
+@operator_route('GET', '/promotions')
+def promotions_page():
+    return get_template('promotions-page.html').render()
 
 
+@operator_route('GET', '/common-promotions')
 @widget
-def list_common_promotions_widget():
+def common_promotions_widget():
     common_promotions = list_common_promotions()
+    return get_template('common-promotions-widget.html').render(common_promotions=common_promotions)
 
 
 @operator_route('POST', '/promotions')

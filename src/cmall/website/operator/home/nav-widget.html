@@ -1,11 +1,25 @@
 {% if operator %}
     <ul class="nav nav-pills" style="width: 90%;margin: auto">
-        <li role="presentation" class="active" style="margin-right: 30px"><a href="/">商品管理</a></li>
-        <li role="presentation" style="margin-right: 30px"><a href="/promotion">推广管理</a></li>
-        <li role="presentation" style="margin-right: 30px"><a href="/operator">管理员管理</a></li>
+        <li role="presentation" id="products" style="margin-right: 30px"><a href="/">商品管理</a></li>
+        <li role="presentation" id="promotions" style="margin-right: 30px"><a href="/promotions">推广管理</a></li>
+        <li role="presentation" id="shoppers" style="margin-right: 30px"><a href="/shoppers">会员管理</a></li>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="javascript: void(0)">{{ operator.name }}</a></li>
             <li><a href="/logout">退出</a></li>
         </ul>
     </ul>
+    <script>
+        $(document).ready(function() {
+            if (window.location.pathname === '/') {
+                $('li.active').removeClass('active');
+                $('li#products').addClass('active');
+            } else if (window.location.pathname === '/promotions') {
+                $('li.active').removeClass('active');
+                $('li#promotions').addClass('active');
+            } else if (window.location.pathname === '/shoppers') {
+                $('li.active').removeClass('active');
+                $('li#shoppers').addClass('active');
+            }
+        });
+    </script>
 {% endif %}

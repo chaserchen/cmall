@@ -12,7 +12,12 @@ def list_title_promotions():
 
 
 def list_common_promotions():
-    return db().list('SELECT * FROM promotion WHERE type=%(PROMOTION_COMMON)s', PROMOTION_COMMON=PROMOTION_COMMON)
+    return db().list('''
+        SELECT po.*, pd.name AS product_name
+        FROM promotion po
+            INNER JOIN product pd ON pd.id=po.product_id
+        WHERE type=%(PROMOTION_COMMON)s
+        ''', PROMOTION_COMMON=PROMOTION_COMMON)
 
 
 @command

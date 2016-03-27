@@ -1,0 +1,29 @@
+<div id="common-promotions-widget" style="width: 90%;margin: 20px auto 0 auto">
+    <table class="table">
+        <tr>
+            <th>推广号</th>
+            <th>有效期</th>
+            <th>商品编码</th>
+            <th>商品名称</th>
+            <th>操作</th>
+        </tr>
+        {% for promotion in common_promotions %}
+            <tr class="common-promotion" data-id="{{ promotion.id }}">
+                <td class="active">{{ promotion.id }}</td>
+                {% if promotion.start_at and promotion.end_at %}
+                    <td class="active">{{ promotion.start_at |date + '~' + promotion.end_at |date }}</td>
+                {% elif promotion.start_at %}
+                    <td class="active">{{ promotion.start_at |date + '起' }}</td>
+                {% elif promotion.end_at %}
+                    <td class="active">{{ promotion.end_at |date + '前' }}</td>
+                {% endif %}
+                <td class="active">{{ promotion.product_id }}</td>
+                <td class="active">{{ promotion.product_name }}</td>
+                <td class="active">
+                    <button class="btn btn-warning">修改</button>
+                    <button class="btn btn-danger">删除</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
