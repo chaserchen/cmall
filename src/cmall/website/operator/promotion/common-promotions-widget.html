@@ -1,4 +1,4 @@
-<div id="common-promotions-widget" style="width: 90%;margin: 20px auto 0 auto">
+<div id="common-promotions-widget" style="width: 90%;margin: 20px auto 0 auto" data-refresh-url="/common-promotions">
     <table class="table">
         <tr>
             <th>推广号</th>
@@ -8,7 +8,7 @@
             <th>操作</th>
         </tr>
         {% for promotion in common_promotions %}
-            <tr class="common-promotion" data-id="{{ promotion.id }}">
+            <tr class="common-promotion" data-id="{{ promotion.id }}"  data-product-id="{{ promotion.product_id }}">
                 <td class="active">{{ promotion.id }}</td>
                 {% if promotion.start_at and promotion.end_at %}
                     <td class="active">{{ promotion.start_at |date + '~' + promotion.end_at |date }}</td>
@@ -20,10 +20,31 @@
                 <td class="active">{{ promotion.product_id }}</td>
                 <td class="active">{{ promotion.product_name }}</td>
                 <td class="active">
-                    <button class="btn btn-warning">修改</button>
-                    <button class="btn btn-danger">删除</button>
+                    <button class="edit-promotion btn btn-warning">修改</button>
+                    <button class="delete-promotion btn btn-danger">删除</button>
                 </td>
             </tr>
         {% endfor %}
     </table>
 </div>
+<script>
+    $(document).ready(function () {
+        veil.widget.handle('.common-promotion', '.delete-promotion', 'click', function (widget) {
+            if (confirm('确定删除该商品推广吗?')) {
+                veil.resource.del({
+                    url: '/promotions/' + widget.data('id'),
+                    onSuccess: function () {
+                        veil.widget.refresh($('#common-promotions-widget'));
+                    }
+                });
+            }
+        });
+
+        veil.widget.handle('.common-promotion', '.edit-promotion', 'click', function (widget) {
+            $.showDialog({
+                content: '/products/' + widget.data('productId') + '/promotion',
+                width: '400px'
+            })
+        })
+    });
+</script>
