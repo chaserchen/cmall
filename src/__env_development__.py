@@ -32,7 +32,7 @@ config = __env__.env_config(
 
 ENV_DEVELOPMENT = {
     'development': veil_env(name='development', hosts={}, servers={
-        '@': veil_server(
+        'dev-server': veil_server(
             host_name='',
             sequence_no=10,
             supervisor_http_port=DEVELOPMENT_SUPERVISOR_HTTP_PORT,

@@ -3,7 +3,18 @@ from veil.model.collection import *
 from veil.profile.setting import *
 from veil.frontend.nginx_setting import NGINX_PID_PATH
 
-WEBSITES = ['cmall', 'operator']
+HTTP_SCHEME = 'http'
+HTTPS_SCHEME = 'https'
+HTTP_STANDARD_PORT = 80
+HTTPS_STANDARD_PORT = 443
+
+WEBSITES = [
+    DictObject(purpose='cmall', prevents_xsrf=True, recalculates_static_file_hash=True, process_page_javascript=True, process_page_stylesheet=True,
+               clears_template_cache=True),
+    DictObject(purpose='operator', prevents_xsrf=True, recalculates_static_file_hash=True, process_page_javascript=True, process_page_stylesheet=True,
+               clears_template_cache=True),
+]
+
 
 PERSON_WEBSITE_BUCKETS = ['captcha_image', 'cmall_images']
 
@@ -28,10 +39,10 @@ LOGGING_LEVEL_CONFIG = objectify({
     'delayed_job_scheduler': 'info',
     'job_worker': 'info', # just control how pyres do the logging, our code still controlled by LOGGING_LEVEL_CONFIG.cmall
     'cmall_postgresql': {
-        'log_min_duration_statement': 0 if VEIL_ENV_TYPE == 'development' else 300
+        'log_min_duration_statement': 0 if VEIL_ENV.is_dev else 300
     },
     'cmall': {
-        '__default__': 'DEBUG' if VEIL_ENV_TYPE in {'development', 'test'} else 'INFO',
+        '__default__': 'DEBUG' if VEIL_ENV.is_dev or VEIL_ENV.is_test else 'INFO',
 #        'cmall.feature': 'DEBUG',
     }
 })
@@ -120,7 +131,7 @@ def postgresql_log_rotater_program(purpose):
 
 
 def log_rotated_postgresql_program(purpose, *args, **kwargs):
-    if VEIL_ENV_TYPE != 'development':
+    if not VEIL_ENV.is_dev:
         kwargs['log_filename'] = 'postgresql.log' # will disable the builtin log rotation
     return merge_multiple_settings(postgresql_program(purpose, *args, **kwargs), postgresql_log_rotater_program(purpose))
 
@@ -147,7 +158,7 @@ def cmall_website_programs(config):
 
 
 def cmall_website_nginx_server(config, extra_locations=None):
-    locations = website_locations('cmall', VEIL_ENV_TYPE in {'public', 'staging'}, max_upload_file_size=PERSON_WEBSITE_MAX_UPLOAD_FILE_SIZE)
+    locations = website_locations('cmall', VEIL_ENV.is_prod or VEIL_ENV.is_staging, max_upload_file_size=PERSON_WEBSITE_MAX_UPLOAD_FILE_SIZE)
     locations = merge_multiple_settings(locations, extra_locations or {}, website_bucket_locations(PERSON_WEBSITE_BUCKETS))
     return nginx_server(config.cmall_website_domain, config.cmall_website_domain_port, locations=locations,
         upstreams=website_upstreams('cmall', config.cmall_website_start_port, config.cmall_website_process_count),
@@ -160,7 +171,7 @@ def operator_website_programs(config):
 
 
 def operator_website_nginx_server(config, extra_locations=None):
-    locations = website_locations('operator', VEIL_ENV_TYPE in {'public', 'staging'}, max_upload_file_size=PERSON_WEBSITE_MAX_UPLOAD_FILE_SIZE)
+    locations = website_locations('operator', VEIL_ENV.is_prod or VEIL_ENV.is_staging, max_upload_file_size=PERSON_WEBSITE_MAX_UPLOAD_FILE_SIZE)
     locations = merge_multiple_settings(locations, extra_locations or {}, website_bucket_locations(PERSON_WEBSITE_BUCKETS))
     return nginx_server(config.operator_website_domain, config.operator_website_domain_port, locations=locations,
         upstreams=website_upstreams('operator', config.operator_website_start_port, config.operator_website_process_count),
@@ -227,18 +238,20 @@ def cmall_config(config):
             'password': SECURITY_CONFIG.db_password,
             'schema': 'public'
         }
-    for purpose in WEBSITES:
+    for website in WEBSITES:
+        purpose = website.purpose
         cmall_config_['{}_website'.format(purpose)] = {
             'domain': config['{}_website_domain'.format(purpose)],
             'domain_port': config['{}_website_domain_port'.format(purpose)],
+            'domain_scheme': config.get('{}_website_domain_scheme'.format(purpose), HTTPS_SCHEME if config['{}_website_domain_port'.format(purpose)] == HTTPS_STANDARD_PORT else HTTP_SCHEME),
             'start_port': config['{}_website_start_port'.format(purpose)],
             'locale': 'zh_Hans_CN.UTF-8',
             'master_template_directory': VEIL_HOME / 'src' / 'cmall' / 'website' / purpose,
-            'prevents_xsrf': True,
-            'recalculates_static_file_hash': True,
-            'process_page_javascript': True,
-            'process_page_stylesheet': True,
-            'clears_template_cache': True
+            'prevents_xsrf': website.prevents_xsrf,
+            'recalculates_static_file_hash': website.recalculates_static_file_hash,
+            'process_page_javascript': website.process_page_javascript,
+            'process_page_stylesheet': website.process_page_stylesheet,
+            'clears_template_cache': website.clears_template_cache
         }
     return cmall_config_
 
